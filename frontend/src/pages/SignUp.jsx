@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from '../api/auth.jsx';
+import { signUp } from '../services/auth.jsx';
 import Swal from "sweetalert2";
 import Particles from "../Backgrounds/Particles/Particles";
 import ShinyText from "../TextAnimations/ShinyText/ShinyText";
