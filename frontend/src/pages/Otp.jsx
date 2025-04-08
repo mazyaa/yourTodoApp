@@ -1,8 +1,8 @@
 // import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { otpVerify } from '../api/auth.jsx';
-import { sendOtp } from '../api/auth.jsx';
+import { otpVerify } from '../services/auth.jsx';
+import { sendOtp } from '../services/auth.jsx';
 // import Swal from 'sweetalert2';
 import Particles from "../Backgrounds/Particles/Particles";
 import Swal from 'sweetalert2';

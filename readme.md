@@ -26,6 +26,8 @@ yourTodo adalah aplikasi manajemen tugas (todo list) berbasis web yang memudahka
 - Update status todo (mark as completed)
 - Waktu todo disimpan sesuai zona waktu lokal user
 - Edit profil pengguna
+- Session login menggunakan **cookie-based authentication**
+- Dashboard admin (mengelola data todo dan user)
 
 
 Build with ❤️ by [Muhamad Azi Sudarya](https://github.com/mazyaa)

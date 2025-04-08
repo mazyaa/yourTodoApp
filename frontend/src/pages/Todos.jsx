@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { refreshTokenAuth } from "../api/auth.jsx";
+import { refreshTokenAuth } from "../services/auth.jsx";
 import moment from "moment-timezone";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -56,7 +56,7 @@ export default function Todos() {
       const currentDate = new Date();
       if (expired * 1000 < currentDate.getTime()) {
         await axios
-          .get(import.meta.env.VITE_API_URL + "/auth/refresh-token")
+          .get(import.meta.env.VITE_services_URL + "/auth/refresh-token")
           .then((response) => {
             const getNewAccessToken = response.data.accessToken;
             config.headers.Authorization = `Bearer ${getNewAccessToken}`;
@@ -82,7 +82,7 @@ export default function Todos() {
     };
 
     await axiosJWT
-      .post(import.meta.env.VITE_API_URL + "/todos", data, {
+      .post(import.meta.env.VITE_services_URL + "/todos", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -111,7 +111,7 @@ export default function Todos() {
 
   async function getTodosByStatusIsNotCompleted() {
     await axiosJWT
-      .get(import.meta.env.VITE_API_URL + "/todos/not-completed", {
+      .get(import.meta.env.VITE_services_URL + "/todos/not-completed", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -132,7 +132,7 @@ export default function Todos() {
 
   async function getTodosByStatusIsCompleted() {
     await axiosJWT
-      .get(import.meta.env.VITE_API_URL + "/todos/completed", {
+      .get(import.meta.env.VITE_services_URL + "/todos/completed", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -153,7 +153,7 @@ export default function Todos() {
 
   async function updateStatusTodo(id) {
     await axiosJWT
-      .put(import.meta.env.VITE_API_URL + `/todos/status/${id}`,{}, // Empty body since no data is being sent
+      .put(import.meta.env.VITE_services_URL + `/todos/status/${id}`,{}, // Empty body since no data is being sent
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -181,7 +181,7 @@ export default function Todos() {
 
   async function deleteTodo(id) {
     await axiosJWT
-      .delete(import.meta.env.VITE_API_URL + `/todos/${id}`, {
+      .delete(import.meta.env.VITE_services_URL + `/todos/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
