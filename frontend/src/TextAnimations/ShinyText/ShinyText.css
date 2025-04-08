@@ -1,0 +1,33 @@
+/*
+	jsrepo 1.38.0
+	Installed from https://reactbits.dev/default/
+	19-02-2025
+*/
+
+.shiny-text {
+  color: #ffffff54; /* Adjust this color to change intensity/style */
+  background: linear-gradient(
+    34deg,
+    rgba(240, 234, 234, 0.11) 40%,
+    rgb(255, 255, 255) 50%,
+    rgba(252, 251, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: inline-block;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
+}
+
+.shiny-text.disabled {
+  animation: none;
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "todos" ALTER COLUMN "dueDate" SET DATA TYPE TEXT;
