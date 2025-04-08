@@ -1,0 +1,38 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "db:reset": "dotenv -e .env -- prisma migrate reset --force",
+    "db:migrate": "dotenv -e .env -- prisma migrate dev",
+    "db:seed": "dotenv -e .env -- prisma db seed"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "handlebars": "^4.7.8",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.48",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.16",
+    "prisma": "^6.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "prisma": {
+    "schema": "./src/utils/prisma/schema.prisma",
+    "seed": "node ./src/utils/prisma/seed.js"
+  },
+  "description": ""
+}

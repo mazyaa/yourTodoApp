@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your OTP Code</title>
+    <style>
+      body {
+        font-family: "montserrat";
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 12px auto;
+        background-color: aqua;
+        color: black;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .container p {
+        font-size: 16px;
+        text-align: center;
+        color: black;
+      }
+      img{
+      width: 30%;
+      }
+
+      .header {
+        text-align: center;
+        padding-bottom: 6px;
+      }
+      .otp-code {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333333;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #777777;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img
+          src="https://media-hosting.imagekit.io//b157d5f603ff4a8c/Screenshot_2025-01-31_204524-removebg-preview.png?Expires=1832940721&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=BTbG6L~AVlDfZ3c7qilOfM9WDkcNx780TL9i2Iqyg3zhT3QLSgOaKUz5QNacnZx4MIt4uNJmuxaS0R6oF0dSNtxHArjqYBJ53~U8JXfCEZ6uU4f2mVODKVTxEozS1KoNN3JxgHLqS6PJV6OEAW-KsoG4O1HP6WmXY14DKQ8QfFuNtC2CRBMCXgDQs1gkcEjEkxjGEeFotuAeAr~PGZk72Hpz3T-93KP1ugLh0bQ5odelc8ini6j6enwo7uCAu0bioFS8qqDXNa3~~jLrrST-~fMJ1pv~20A6GHAZQJ-mNR1QgeplcGyZ83qbSpKb2rD-1qmjPHxr~wo361YTQi6jqQ__"
+          alt=""
+        />
+        <h1>Your OTP Code</h1>
+      </div>
+      <p>Hello, {{ name }}</p>
+      <p>Use the following OTP code to complete your action:</p>
+      <div class="otp-code">{{ otp }}</div>
+      <p>If you did not request this code, please ignore this email.</p>
+      <div class="footer">
+        <p>&copy; yourTodo.</p>
+      </div>
+    </div>
+  </body>
+</html>
