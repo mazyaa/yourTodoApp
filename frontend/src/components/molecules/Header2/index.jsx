@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import profile from "../assets/profile.svg";
-import image1 from "../assets/image1.png";
-import ShinyText from "../TextAnimations/ShinyText/ShinyText";
+import profile from "../../../assets/profile.svg";
+import image1 from "../../../assets/image1.png";
+import ShinyText from "../../../TextAnimations/ShinyText/ShinyText";
 import Swal from "sweetalert2";
 import axios from 'axios';
 

@@ -1,32 +1,37 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from '../services/auth.jsx';
+import { signIn } from "../../services/auth.jsx";
 import Swal from "sweetalert2";
-import Particles from "../Backgrounds/Particles/Particles";
-import ShinyText from "../TextAnimations/ShinyText/ShinyText";
+import Particles from "../../Backgrounds/Particles/Particles.jsx";
+import ShinyText from "../../TextAnimations/ShinyText/ShinyText.jsx";
 
-export default function SignUp() {
-  const [name, setName] = useState("");
+export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-
   const navigate = useNavigate();
 
-  async function Register(e) {
+  async function Login(e) {
     e.preventDefault();
-      // The signUp "function" is called with the name, email, and password as arguments
-     signUp(name, email, password)
+    // The signIn "function" is called with the email and password as arguments
+    signIn(email, password)
       .then((response) => {
+        if (!response.data.verified) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please verify your email to continue",
+          });
+          navigate("/Otp");
+        }
         Swal.fire({
           icon: "success",
-          title: "Registration Successful",
+          title: "Login Successful",
           text: response.data.message,
         });
         setErrors({});
-        localStorage.setItem("userEmail", email);
-        navigate("/Otp");
+        navigate("/todos");
       })
       .catch((error) => {
         setErrors(error.response.data.message || {});
@@ -38,7 +43,7 @@ export default function SignUp() {
     <>
       <div
         style={{ height: "110vh" }}
-        className="bg-gray-950 flex w-full flex-col items-center justify-center h-screen text-white"
+        className="bg-gray-950 flex flex-col items-center justify-center h-screen text-white"
       >
         <Particles
           particleColors={["#ffffff", "#ffffff"]}
@@ -51,37 +56,29 @@ export default function SignUp() {
           disableRotation={false}
         />
         <div className="absolute flex h-auto backdrop-blur-md w-90 bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
-          <h1 className="font-bold text-4xl">SIGN UP</h1>
-          <form onSubmit={Register} className="flex flex-col gap-3">
+          <h1 className="font-bold text-4xl">SIGN IN</h1>
+          {typeof errors === "string" && (
+            <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+              ! {errors}
+            </p>
+          )}
+          <form onSubmit={Login} className="flex flex-col gap-3">
             <div>
               <label htmlFor="Name" className="pl-4">
-                Name
-              </label>
-              <input
-                type="text"
-                className="border rounded-full w-75 px-4 py-2"
-                placeholder="your name"
-                value={name} // value is set to the name state
-                onChange={(e) => setName(e.target.value)} // onChange event is used to update the name state
-              />
-              {errors.name && <p className="text-red-500 font-bold text-sm pl-4 pt-1">! {errors.name}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="Email" className="pl-4">
                 Email
               </label>
               <input
                 type="text"
                 className="border rounded-full w-75 px-4 py-2"
                 placeholder="your email"
-                value={email} // value is set to the email state
-                onChange={(e) => setEmail(e.target.value)} // onChange event is used to update the email state
+                onChange={(e) => setEmail(e.target.value)}
               />
-              {errors.email && <p className="text-red-500 font-bold text-sm pl-4 pt-1">{errors.email}</p>}
-              {typeof errors === 'string' && <p className="text-red-500 font-bold text-sm pl-4 pt-1">{errors}</p>}
+              {errors.email && (
+                <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+                  ! {errors.email}
+                </p>
+              )}
             </div>
-
             <div>
               <label htmlFor="Password" className="pl-4">
                 Password
@@ -90,10 +87,13 @@ export default function SignUp() {
                 type="password"
                 className="border rounded-full w-75 px-4 py-2"
                 placeholder="*****"
-                value={password} // value is set to the password state
-                onChange={(e) => setPassword(e.target.value)} // onChange event is used to update the password
+                onChange={(e) => setPassword(e.target.value)}
               />
-              {errors.password && <p className="text-red-500 font-bold text-sm pl-4 pt-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+                  ! {errors.password}
+                </p>
+              )}
             </div>
 
             <input
@@ -101,17 +101,17 @@ export default function SignUp() {
               value="Submit"
               className="mt-2 p-2 border rounded-full mx-23 text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
             />
-            <div className="text-center">
-              Have an account?{" "}
-              <Link to="/signin" className="text-blue-500">
+            <p className="text-center">
+              Dont Have an account?{" "}
+              <Link to="/Signup" className="text-blue-500">
                 <ShinyText
-                  text="Sign In Here"
+                  text="Sign Up Here"
                   disabled={false}
                   speed={2}
                   className=""
                 />
               </Link>
-            </div>
+            </p>
           </form>
         </div>
       </div>

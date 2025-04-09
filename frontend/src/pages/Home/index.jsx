@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import TrueFocus from "../TextAnimations/TrueFocus/TrueFocus";
-import ShinyText from "../TextAnimations/ShinyText/ShinyText";
-import Particles from "../Backgrounds/Particles/Particles";
+import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus";
+import ShinyText from "../../TextAnimations/ShinyText/ShinyText";
+import Particles from "../../Backgrounds/Particles/Particles";
 
 export default function Home() {
   return (

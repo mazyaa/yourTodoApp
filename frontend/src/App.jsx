@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Todos from "./pages/Todos";
-import Navbar from "./components/Navbar";
-import NavbarV2 from "./components/NavbarV2";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
-import Otp from "./pages/Otp";
+import Home from "./pages/Home/index.jsx";
+import Todos from "./pages/Todos/index.jsx";
+import Navbar from "./components/molecules/Header1/index.jsx";
+import NavbarV2 from "./components/molecules/Header2/index.jsx";
+import SignUp from "./pages/SignUp/index.jsx";
+import SignIn from "./pages/Signin/index.jsx";
+import Otp from "./pages/Otp/index.jsx";
 
 function App() {
   return (

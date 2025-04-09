@@ -40,11 +40,11 @@ export async function getTodoByStatusIsNotCompleted(_req, res, next) {
   try {
     const user = res.locals.user;
 
-    const todosIsNotCompleted = await todosServices.getTodoByStatusIsNotCompleted(user.id);
+    const todoIsNotCompleted = await todosServices.getTodoByStatusIsNotCompleted(user.id);
 
     res.status(200).json({
       message: "Todos retrieved successfully",
-      todosIsNotCompleted,
+      todoIsNotCompleted,
     });
   } catch (error) {
     next(error);
@@ -55,11 +55,11 @@ export async function getTodoByStatusIsCompleted(req, res, next) {
   try {
     const user = res.locals.user;
 
-    const todosIsCompleted = await todosServices.getTodoByStatusIsCompleted(user.id);
+    const todoIsCompleted = await todosServices.getTodoByStatusIsCompleted(user.id);
 
     res.status(200).json({
       message: "Todos retrieved successfully",
-      todosIsCompleted,
+      todoIsCompleted,
     });
   } catch (error) {
     next(error);
