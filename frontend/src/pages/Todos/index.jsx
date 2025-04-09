@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { refreshTokenAuth } from "../services/auth.jsx";
+import { refreshTokenAuth } from "../../services/auth.jsx";
 import moment from "moment-timezone";
 import axios from "axios";
 import Swal from "sweetalert2";
-import Particles from "../Backgrounds/Particles/Particles";
-import TrueFocus from "../TextAnimations/TrueFocus/TrueFocus";
+import Particles from "../../Backgrounds/Particles/Particles.jsx";
+import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus.jsx";
 
 export default function Todos() {
   const navigate = useNavigate();
@@ -117,16 +117,15 @@ export default function Todos() {
         },
       })
       .then((response) => {
-        setTodosIsNotCompleted(response.data.todosIsNotCompleted);
-        console.log(response.data.todosIsNotCompleted);
+        setTodosIsNotCompleted(response.data.todoIsNotCompleted);
       })
       .catch((error) => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: error.response.data.message,
+          text: error.response?.data?.message || "An error occurred",
         });
-        navigate("/signin");
+        console.error(error.response?.data?.message || error.message);
       });
   }
 
@@ -138,16 +137,15 @@ export default function Todos() {
         },
       })
       .then((response) => {
-        setTodosIsCompleted(response.data.todosIsCompleted);
-        console.log(response.data.todosIsCompleted);
+        setTodosIsCompleted(response.data.todoIsCompleted);
       })
       .catch((error) => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: error.response.data.message,
+          text: error.response?.data?.message || "An error occurred",
         });
-        navigate("/signin");
+        console.error(error.response?.data?.message || error.message);
       });
   }
 

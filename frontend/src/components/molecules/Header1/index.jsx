@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import image1 from "../assets/image1.png";
-import ShinyText from "../TextAnimations/ShinyText/ShinyText";
+import image1 from "../../../assets/image1.png";
+import ShinyText from "../../../TextAnimations/ShinyText/ShinyText";
 
 export default function Navbar() {
   return (
