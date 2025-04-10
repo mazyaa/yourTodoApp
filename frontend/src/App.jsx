@@ -6,6 +6,7 @@ import NavbarV2 from "./components/molecules/Header2/index.jsx";
 import SignUp from "./pages/SignUp/index.jsx";
 import SignIn from "./pages/Signin/index.jsx";
 import Otp from "./pages/Otp/index.jsx";
+import Footer from "./components/molecules/Footer/index.jsx"; 
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <>
               <Navbar />
               <Home />
+              <Footer />
             </>
           }
         />
@@ -28,6 +30,7 @@ function App() {
             <>
               <Navbar />
               <SignUp />
+              <Footer />
             </>
           }
         />
@@ -38,6 +41,7 @@ function App() {
             <>
               <Navbar />
               <SignIn />
+              <Footer />
             </>
           }
         />
@@ -48,6 +52,7 @@ function App() {
             <>
               <NavbarV2 />
               <Todos />
+              <Footer />
             </>
           }
         />
@@ -58,6 +63,7 @@ function App() {
             <>
               <Navbar />
               <Otp />
+              <Footer />
             </>
           }
         />
