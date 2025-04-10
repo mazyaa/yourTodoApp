@@ -1,6 +1,6 @@
 # ✅ yourTodo
 
-yourTodo adalah aplikasi manajemen tugas (todo list) berbasis web yang memudahkan pengguna untuk mencatat, mengatur, dan menyelesaikan tugas harian mereka. Aplikasi ini dilengkapi fitur autentikasi, dashboard pengguna, dan dashboard admin.
+yourTodo adalah aplikasi manajemen tugas (todo list) berbasis web yang memudahkan pengguna untuk mencatat, mengatur, dan menyelesaikan tugas harian. Aplikasi ini dilengkapi fitur autentikasi, dashboard pengguna, dan dashboard admin.
 
 ## 🧰 Tech Stack
 
@@ -9,6 +9,7 @@ yourTodo adalah aplikasi manajemen tugas (todo list) berbasis web yang memudahka
 - **Tailwind CSS** — Utility-first CSS untuk styling yang cepat dan responsive
 - **Axios** — Untuk komunikasi HTTP dengan backend
 - **Moment.js** — Untuk manipulasi dan formatting waktu
+- **Reactbits** - Library javascript untuk membuat tampilan yang lebih modern
 
 ### 🖧 Backend
 - **Express.js** — Framework backend berbasis Node.js
