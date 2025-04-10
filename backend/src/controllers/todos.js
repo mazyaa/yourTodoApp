@@ -51,7 +51,7 @@ export async function getTodoByStatusIsNotCompleted(_req, res, next) {
   }
 }
 
-export async function getTodoByStatusIsCompleted(req, res, next) {
+export async function getTodoByStatusIsCompleted(_req, res, next) {
   try {
     const user = res.locals.user;
 
