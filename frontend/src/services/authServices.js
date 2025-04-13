@@ -1,4 +1,4 @@
-import api from './api.jsx';
+import api from './api.js';
 
 export async function signUp (name, email, password) {
     const response = await api.post('/auth/register', {
