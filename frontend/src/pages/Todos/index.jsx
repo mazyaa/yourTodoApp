@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { refreshTokenAuth } from "../../services/auth.jsx";
-import moment from "moment-timezone";
+import { refreshTokenAuth } from "../../services/authServices.js";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import moment from "moment-timezone";
 import Swal from "sweetalert2";
 import Particles from "../../Backgrounds/Particles/Particles.jsx";
 import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus.jsx";
@@ -110,6 +110,7 @@ export default function Todos() {
   }
 
   async function getTodosByStatusIsNotCompleted() {
+    if (!token) return; // Ensure token is available before making the request
     await axiosJWT
       .get(import.meta.env.VITE_API_URL + "/todos/not-completed", {
         headers: {
@@ -118,16 +119,17 @@ export default function Todos() {
       })
       .then((response) => {
         setTodosIsNotCompleted(response.data.todoIsNotCompleted);
-      })
+      });
   }
 
   async function getTodosByStatusIsCompleted() {
+    if (!token) return; // Ensure token is available before making the request
     await axiosJWT
       .get(import.meta.env.VITE_API_URL + "/todos/completed", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+})
       .then((response) => {
         setTodosIsCompleted(response.data.todoIsCompleted);
       })
