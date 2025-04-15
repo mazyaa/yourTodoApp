@@ -6,7 +6,6 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import moment from "moment-timezone";
 import Swal from "sweetalert2";
-import Particles from "../../Backgrounds/Particles/Particles.jsx";
 import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus.jsx";
 
 export default function Todos() {
@@ -21,10 +20,12 @@ export default function Todos() {
   const [todosIsNotCompleted, setTodosIsNotCompleted] = useState([]);
 
   useEffect(() => {
-    async () => {
+   async function fetchData() {
       await refreshToken();
-      getTodosByStatusIsNotCompleted();
-    };
+      await getTodosByStatusIsNotCompleted();
+    }
+
+    fetchData();
   }, []);
 
   async function refreshToken() {
@@ -120,9 +121,8 @@ export default function Todos() {
   }
 
   async function updateStatusTodo(id) {
-    try{
-      const response = await axiosJWT
-      .put(
+    try {
+      const response = await axiosJWT.put(
         import.meta.env.VITE_API_URL + `/todos/status/${id}`,
         {}, // Empty body since no data is being sent
         {
@@ -150,25 +150,13 @@ export default function Todos() {
     }
   }
 
-
-
   return (
     <>
       <div
-        style={{ height: "410vh" }}
+        style={{ height: "auto" }}
         className="bg-gray-950 flex w-full flex-col items-center justify-center text-white"
       >
-        <Particles
-          particleColors={["#ffffff", "#ffffff"]}
-          particleCount={500}
-          particleSpread={10}
-          speed={0.1}
-          particleBaseSize={100}
-          moveParticlesOnHover={true}
-          alphaParticles={false}
-          disableRotation={false}
-        />
-        <div className="absolute top-43 flex h-auto backdrop-blur-md w-190 bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
+        <div className="flex mt-34 h-auto backdrop-blur-md w-190 bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
           <TrueFocus
             sentence="Create Your Todos"
             manualMode={false}
@@ -262,7 +250,7 @@ export default function Todos() {
             />
           </form>
         </div>
-        <div className="absolute backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl top-250 flex flex-col items-center justify-center mt-34 gap-10">
+        <div className="mb-43 backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl flex flex-col items-center justify-center mt-34 gap-10">
           <TrueFocus
             sentence="In Progress"
             manualMode={false}
@@ -295,10 +283,30 @@ export default function Todos() {
                     </td>
                     <td className="border">
                       <div className="flex gap-4">
-                        <button className="btn btn-secondary">Edit</button>
+                        <button
+                          className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
+                          onClick={() =>
+                            document.getElementById("my_modal_1").showModal()
+                          }
+                        >
+                          Edit
+                        </button>
+                        <dialog id="my_modal_1" className="modal">
+                          <div className="modal-box">
+                            <h3 className="font-bold text-lg text-black">Hello!</h3>
+                            <p className="py-4 text-black">
+                              Press ESC key or click the button below to close
+                            </p>
+                            <div className="modal-action">
+                              <form method="dialog">
+                                <button className="btn">Close</button>
+                              </form>
+                            </div>
+                          </div>
+                        </dialog>
                         <button
                           onClick={() => updateStatusTodo(todo.id)}
-                          className="btn btn-primary"
+                          className="btn btn-primary shadow-none"
                         >
                           Mark As Complete
                         </button>
