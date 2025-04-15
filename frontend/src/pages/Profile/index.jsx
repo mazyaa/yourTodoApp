@@ -8,7 +8,6 @@ import axios from "axios";
 import { refreshTokenAuth } from "../../services/authServices";
 import { useNavigate } from "react-router-dom";
 import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus";
-import Particles from "../../Backgrounds/Particles/Particles";
 import ShinyText from "../../TextAnimations/ShinyText/ShinyText";
 
 export default function Profile() {
@@ -20,10 +19,11 @@ export default function Profile() {
   const [todosIsCompleted, setTodosIsCompleted] = useState([]);
 
   useEffect(() => {
-    async () => {
+    async function fetchData() {
       await refreshToken();
-      getTodosByStatusIsCompleted();
-    };
+      await getTodosByStatusIsCompleted();
+    }
+    fetchData();
   }, []);
 
   async function refreshToken() {
@@ -48,7 +48,6 @@ export default function Profile() {
   }
 
   async function getTodosByStatusIsCompleted() {
-    if (!token) return; // Ensure token is available before making the request
     await axiosJWT
       .get(import.meta.env.VITE_API_URL + "/todos/completed", {
         headers: {
@@ -109,19 +108,9 @@ export default function Profile() {
   }
   return (
     <div 
-    style={{ height: "200vh" }}
+    style={{ height: "Auto" }}
     className="bg-gray-950 flex w-full flex-col items-center justify-center h-screen text-white">
-      <Particles
-        particleColors={["#ffffff", "#ffffff"]}
-        particleCount={500}
-        particleSpread={10}
-        speed={0.1}
-        particleBaseSize={100}
-        moveParticlesOnHover={true}
-        alphaParticles={false}
-        disableRotation={false}
-      />
-      <div className="absolute backdrop-blur-sm bg-white/10 w-100 px-12 py-5 rounded-xl flex flex-col gap-7">
+      <div className="mt-34 backdrop-blur-sm bg-white/10 w-100 px-12 py-5 rounded-xl flex flex-col gap-7">
         <Link
           to="/Todos"
           className="p-2 border w-40 rounded-full text-white hover:bg-sky-950 border-slate-700 cursor-pointer"
@@ -158,7 +147,7 @@ export default function Profile() {
           </button>
         </div>
       </div>
-      <div className="absolute backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl top-400 flex flex-col items-center justify-center mt-34 gap-10">
+      <div className="mb-34 backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl flex flex-col items-center justify-center mt-34 gap-10">
         <TrueFocus
           sentence="Todos Completed"
           manualMode={false}
@@ -193,7 +182,7 @@ export default function Profile() {
                     <div className="flex gap-4">
                       <button
                         onClick={() => deleteTodo(todo.id)}
-                        className="btn bg-red-700 text-white"
+                        className="btn border-none bg-red-700 hover:bg-red-900 shadow-none text-white"
                       >
                         Delete Todo
                       </button>
