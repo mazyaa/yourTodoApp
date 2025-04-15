@@ -19,34 +19,32 @@ export default function Todos() {
   const [token, setToken] = useState("");
   const [expired, setExpired] = useState("");
   const [todosIsNotCompleted, setTodosIsNotCompleted] = useState([]);
-  const [todosIsCompleted, setTodosIsCompleted] = useState([]);
 
   useEffect(() => {
-    refreshToken().then(() => {
-      getTodosByStatusIsNotCompleted(),
-      getTodosByStatusIsCompleted();
-    });
+    async () => {
+      await refreshToken();
+      getTodosByStatusIsNotCompleted();
+    };
   }, []);
 
   async function refreshToken() {
-    refreshTokenAuth()
-      .then((response) => {
-        const getNewAccessToken = response.data.accessToken;
-        setToken(getNewAccessToken);
+    try {
+      const response = await refreshTokenAuth();
+      const getNewAccessToken = response.data.accessToken;
+      setToken(getNewAccessToken);
 
-        const decoded = jwtDecode(getNewAccessToken);
-        setExpired(decoded.exp);
-      })
-      .catch((error) => {
-        if (error.response) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Your session has expired! Please login again to continue",
-          });
-          navigate("/signin");
-        }
-      });
+      const decoded = jwtDecode(getNewAccessToken);
+      setExpired(decoded.exp);
+    } catch (error) {
+      if (error.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Your session has expired! Please login again to continue",
+        });
+        navigate("/signin");
+      }
+    }
   }
 
   const axiosJWT = axios.create();
@@ -81,36 +79,35 @@ export default function Todos() {
       dueDate: dueDate,
     };
 
-    await axiosJWT
-      .post(import.meta.env.VITE_API_URL + "/todos", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Todo Added",
-          text: response.data.message,
-        });
-        setTitle("");
-        setDescription("");
-        setPriority("");
-        setDueDate("");
-        setErrors({});
-      })
-      .then(() => {
-        getTodosByStatusIsNotCompleted(); // get todos after adding a new one (real-time update)
-      })
-      .catch((error) => {
-        if (error.response) {
-          setErrors(error.response.data.message || {});
+    try {
+      const response = await axiosJWT.post(
+        import.meta.env.VITE_API_URL + "/todos",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Todo Added",
+        text: response.data.message,
       });
+      setTitle("");
+      setDescription("");
+      setPriority("");
+      setDueDate("");
+      setErrors({});
+      await getTodosByStatusIsNotCompleted(); // get todos after adding a new one (real-time update)
+    } catch (error) {
+      if (error.response) {
+        setErrors(error.response.data.message || {});
+      }
+    }
   }
 
   async function getTodosByStatusIsNotCompleted() {
-    if (!token) return; // Ensure token is available before making the request
     await axiosJWT
       .get(import.meta.env.VITE_API_URL + "/todos/not-completed", {
         headers: {
@@ -122,72 +119,38 @@ export default function Todos() {
       });
   }
 
-  async function getTodosByStatusIsCompleted() {
-    if (!token) return; // Ensure token is available before making the request
-    await axiosJWT
-      .get(import.meta.env.VITE_API_URL + "/todos/completed", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-})
-      .then((response) => {
-        setTodosIsCompleted(response.data.todoIsCompleted);
-      })
-  }
-
   async function updateStatusTodo(id) {
-    await axiosJWT
-      .put(import.meta.env.VITE_API_URL + `/todos/status/${id}`,{}, // Empty body since no data is being sent
+    try{
+      const response = await axiosJWT
+      .put(
+        import.meta.env.VITE_API_URL + `/todos/status/${id}`,
+        {}, // Empty body since no data is being sent
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      )
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Activity is completed",
-          text: response.data.message,
-        });
-        getTodosByStatusIsNotCompleted(); // get todos after updating a todo (real-time update)
-        getTodosByStatusIsCompleted(); // get todos after updating a todo (real-time update)
-      })
-      .catch((error) => {
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Activity is completed",
+        text: response.data.message,
+      });
+      await getTodosByStatusIsNotCompleted(); // get todos after updating a todo (real-time update)
+    } catch (error) {
+      if (error.response) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: error.response?.data?.message || "An error occurred",
+          text: error.response.data.message || "An error occurred",
         });
-        console.error(error.response?.data?.message || error.message);
-      });
+        console.error(error.response.data.message || error.message);
+      }
+    }
   }
 
-  async function deleteTodo(id) {
-    await axiosJWT
-      .delete(import.meta.env.VITE_API_URL + `/todos/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Todo Deleted",
-          text: response.data.message,
-        });
-        getTodosByStatusIsNotCompleted(); // get todos after deleting a todo (real-time update)
-        getTodosByStatusIsCompleted(); // get todos after deleting a todo (real-time update)
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.response?.data?.message || "An error occurred",
-        });
-        console.error(error.response?.data?.message || error.message);
-      });
-  }
+
 
   return (
     <>
@@ -338,57 +301,6 @@ export default function Todos() {
                           className="btn btn-primary"
                         >
                           Mark As Complete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr className="text-center">
-                  <td colSpan="5">No todos available</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="absolute backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl top-400 flex flex-col items-center justify-center mt-34 gap-10">
-          <TrueFocus
-            sentence="Todos Completed"
-            manualMode={false}
-            blurAmount={5}
-            borderColor="blue"
-            animationDuration={1}
-            pauseBetweenAnimations={0.5}
-          />
-          <table className="table">
-            <thead>
-              <tr className="text-white text-center">
-                <th className="border">Title</th>
-                <th className="border">Description</th>
-                <th className="border">Priority</th>
-                <th className="border">Due Date</th>
-                <th className="border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {todosIsCompleted && todosIsCompleted.length > 0 ? (
-                todosIsCompleted.map((todo) => (
-                  <tr key={todo.id}>
-                    <td className="border">{todo.title}</td>
-                    <td className="border">{todo.description}</td>
-                    <td className="border">{todo.priority}</td>
-                    <td className="border">
-                      {moment(todo.dueDate)
-                        .format("YYYY-MM-DD - HH:mm:ss")
-                        .toLocaleString()}
-                    </td>
-                    <td className="border">
-                      <div className="flex gap-4">
-                        <button
-                          onClick={() => deleteTodo(todo.id)}
-                          className="btn bg-red-700 text-white"
-                        >
-                          Delete Todo
                         </button>
                       </div>
                     </td>
