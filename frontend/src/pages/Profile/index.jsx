@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -19,10 +20,10 @@ export default function Profile() {
   const [todosIsCompleted, setTodosIsCompleted] = useState([]);
 
   useEffect(() => {
-    refreshToken().then(() => {
+    async () => {
+      await refreshToken();
       getTodosByStatusIsCompleted();
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
   }, []);
 
   async function refreshToken() {
@@ -82,30 +83,30 @@ export default function Profile() {
     }
   );
 
-  async function deleteTodo(id) {
-    await axiosJWT
-      .delete(import.meta.env.VITE_API_URL + `/todos/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Todo Deleted",
-          text: response.data.message,
-        });
-        getTodosByStatusIsCompleted(); // get todos after deleting a todo (real-time update)
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.response?.data?.message || "An error occurred",
-        });
-        console.error(error.response?.data?.message || error.message);
+ async function deleteTodo(id) {
+    try {
+      const response = await axiosJWT.delete(
+        import.meta.env.VITE_API_URL + `/todos/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Todo Deleted",
+        text: response.data.message,
       });
-  };
+      await getTodosByStatusIsCompleted(); // get todos after deleting a todo (real-time update)
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.message || "An error occurred",
+      });
+    }
+  }
   return (
     <div 
     style={{ height: "200vh" }}
