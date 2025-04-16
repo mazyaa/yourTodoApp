@@ -7,6 +7,7 @@ import axios from "axios";
 import moment from "moment-timezone";
 import Swal from "sweetalert2";
 import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus.jsx";
+import ShinyText from "../../TextAnimations/ShinyText/ShinyText.jsx";
 
 export default function Todos() {
   const navigate = useNavigate();
@@ -14,13 +15,17 @@ export default function Todos() {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editPriority, setEditPriority] = useState("");
+  const [editDueDate, setEditDueDate] = useState("");
   const [errors, setErrors] = useState({});
   const [token, setToken] = useState("");
   const [expired, setExpired] = useState("");
   const [todosIsNotCompleted, setTodosIsNotCompleted] = useState([]);
 
   useEffect(() => {
-   async function fetchData() {
+    async function fetchData() {
       await refreshToken();
       await getTodosByStatusIsNotCompleted();
     }
@@ -118,6 +123,50 @@ export default function Todos() {
       .then((response) => {
         setTodosIsNotCompleted(response.data.todoIsNotCompleted);
       });
+  }
+
+  async function editTodo (e, id) {
+    e.preventDefault();
+    try {
+      const data = {
+        title: editTitle,
+        description: editDescription,
+        priority: editPriority,
+        dueDate: editDueDate,
+      };
+
+      const response = await axiosJWT.put(
+        import.meta.env.VITE_API_URL + `/todos/${id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Todo Updated",
+        text: response.data.message,
+      });
+      setEditTitle("");
+      setEditDescription("");
+      setEditPriority("");
+      setEditDueDate("");
+      await getTodosByStatusIsNotCompleted(); // get todos after updating a todo (real-time update)
+
+      // Close the modal after successful edit
+      document.getElementById("my_modal_1").close();
+    } catch (error) {
+      if (error.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data.message,
+        });
+      }
+    }
   }
 
   async function updateStatusTodo(id) {
@@ -281,8 +330,10 @@ export default function Todos() {
                         .format("YYYY-MM-DD - HH:mm:ss")
                         .toLocaleString()}
                     </td>
+
+                    {/* Modal edit */}
                     <td className="border">
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 ">
                         <button
                           className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
                           onClick={() =>
@@ -292,18 +343,94 @@ export default function Todos() {
                           Edit
                         </button>
                         <dialog id="my_modal_1" className="modal">
-                          <div className="modal-box">
-                            <h3 className="font-bold text-lg text-black">Hello!</h3>
-                            <p className="py-4 text-black">
-                              Press ESC key or click the button below to close
-                            </p>
-                            <div className="modal-action">
-                              <form method="dialog">
-                                <button className="btn">Close</button>
-                              </form>
-                            </div>
+                          <div className="modal-box flex h-auto backdrop-blur-md w- bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
+                            <h1 className="text-2xl">
+                              <ShinyText
+                                text="Edit Your Todo"
+                                disabled={false}
+                                speed={2}
+                                className=""
+                              />
+                            </h1>
+                            <form
+                              onSubmit={() => editTodo(todo.id)}
+                              className="flex flex-col gap-3 text-white items-center"
+                            >
+                              <div className="flex flex-col">
+                                <label htmlFor="Title" className="pl-4">
+                                  Title
+                                </label>
+                                <input
+                                  type="text"
+                                  className="border rounded-sm w-100 px-4 py-2"
+                                  placeholder="add title here"
+                                  value={title}
+                                  onChange={(e) => setTitle(e.target.value)}
+                                />
+                              </div>
+
+                              <div className="flex flex-col">
+                                <label htmlFor="Description" className="pl-4">
+                                  Description
+                                </label>
+                                <textarea
+                                  type="text"
+                                  className="border rounded-sm w-100 px-4 py-2 h-55"
+                                  placeholder="your description"
+                                  value={description}
+                                  onChange={(e) =>
+                                    setDescription(e.target.value)
+                                  }
+                                />
+                              </div>
+
+                              <div className="flex flex-col">
+                                <label htmlFor="Priority" className="pl-4">
+                                  Priority
+                                </label>
+                                <select
+                                  className="border rounded-sm w-100 px-4 py-2"
+                                  value={priority}
+                                  onChange={(e) => setPriority(e.target.value)}
+                                >
+                                  <optgroup className="bg-slate-950">
+                                    <option value="">Select Priority...</option>
+                                    <option value="HIGH">HIGH</option>
+                                    <option value="MEDIUM">MEDIUM</option>
+                                    <option value="LOW">LOW</option>
+                                  </optgroup>
+                                </select>
+                              </div>
+
+                              <div className="flex flex-col">
+                                <label htmlFor="dueDate" className="pl-4">
+                                  Due Date
+                                </label>
+                                <input
+                                  type="datetime-local"
+                                  className="border rounded-sm w-100 px-4 py-2"
+                                  placeholder="add date"
+                                  value={dueDate}
+                                  onChange={(e) => setDueDate(e.target.value)}
+                                />
+                              </div>
+
+                              <input
+                                type="submit"
+                                value="Edit Todo"
+                                className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
+                              />
+                              <div className="modal-action">
+                                <form method="dialog">
+                                  <button className="p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer">
+                                    Close
+                                  </button>
+                                </form>
+                              </div>
+                            </form>
                           </div>
                         </dialog>
+
                         <button
                           onClick={() => updateStatusTodo(todo.id)}
                           className="btn btn-primary shadow-none"
