@@ -75,8 +75,10 @@ export async function updateTodoById(req, res) {
 
   // Merge the existing data with the new data from req.body
   const payload = {
-    ...existingTodo,
-    ...req.body,
+    title: req.body.title !== undefined && req.body.title !== "" ? req.body.title : existingTodo.title, // if title is not provided, keep the existing title
+    description: req.body.description !== undefined && req.body.description !== "" ? req.body.description : existingTodo.description, // if description is not provided, keep the existing description
+    priority: req.body.priority !== undefined && req.body.priority !== "" ? req.body.priority : existingTodo.priority, // if priority is not provided, keep the existing priority
+    dueDate: req.body.dueDate !== undefined && req.body.dueDate !== "" ? req.body.dueDate : existingTodo.dueDate, // if dueDate is not provided, keep the existing dueDate
     userId: user.id,
   };
 
