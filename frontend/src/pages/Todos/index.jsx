@@ -33,6 +33,10 @@ export default function Todos() {
     fetchData();
   }, []);
 
+  function openModal() {
+    document.getElementById("my_modal_1").showModal();
+  }
+
   async function refreshToken() {
     try {
       const response = await refreshTokenAuth();
@@ -127,14 +131,13 @@ export default function Todos() {
 
   async function editTodo (e, id) {
     e.preventDefault();
+    const data = {
+      title: editTitle,
+      description: editDescription,
+      priority: editPriority,
+      dueDate: editDueDate,
+    };
     try {
-      const data = {
-        title: editTitle,
-        description: editDescription,
-        priority: editPriority,
-        dueDate: editDueDate,
-      };
-
       const response = await axiosJWT.put(
         import.meta.env.VITE_API_URL + `/todos/${id}`,
         data,
@@ -163,8 +166,10 @@ export default function Todos() {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: error.response.data.message,
+          text: error.message,
         });
+        console.error(error.response.data.message || error.message);
+      document.getElementById("my_modal_1").close();
       }
     }
   }
@@ -336,9 +341,7 @@ export default function Todos() {
                       <div className="flex gap-4 ">
                         <button
                           className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
-                          onClick={() =>
-                            document.getElementById("my_modal_1").showModal()
-                          }
+                          onClick={() => openModal(todo)}
                         >
                           Edit
                         </button>
@@ -353,7 +356,6 @@ export default function Todos() {
                               />
                             </h1>
                             <form
-                              onSubmit={() => editTodo(todo.id)}
                               className="flex flex-col gap-3 text-white items-center"
                             >
                               <div className="flex flex-col">
@@ -364,8 +366,8 @@ export default function Todos() {
                                   type="text"
                                   className="border rounded-sm w-100 px-4 py-2"
                                   placeholder="add title here"
-                                  value={title}
-                                  onChange={(e) => setTitle(e.target.value)}
+                                  value={editTitle}
+                                  onChange={(e) => setEditTitle(e.target.value)}
                                 />
                               </div>
 
@@ -377,9 +379,9 @@ export default function Todos() {
                                   type="text"
                                   className="border rounded-sm w-100 px-4 py-2 h-55"
                                   placeholder="your description"
-                                  value={description}
+                                  value={editDescription}
                                   onChange={(e) =>
-                                    setDescription(e.target.value)
+                                    setEditDescription(e.target.value)
                                   }
                                 />
                               </div>
@@ -390,8 +392,8 @@ export default function Todos() {
                                 </label>
                                 <select
                                   className="border rounded-sm w-100 px-4 py-2"
-                                  value={priority}
-                                  onChange={(e) => setPriority(e.target.value)}
+                                  value={editPriority}
+                                  onChange={(e) => setEditPriority(e.target.value)}
                                 >
                                   <optgroup className="bg-slate-950">
                                     <option value="">Select Priority...</option>
@@ -410,13 +412,14 @@ export default function Todos() {
                                   type="datetime-local"
                                   className="border rounded-sm w-100 px-4 py-2"
                                   placeholder="add date"
-                                  value={dueDate}
-                                  onChange={(e) => setDueDate(e.target.value)}
+                                  value={editDueDate}
+                                  onChange={(e) => setEditDueDate(e.target.value)}
                                 />
                               </div>
 
                               <input
                                 type="submit"
+                                onClick={(e) => editTodo(e, todo.id)}
                                 value="Edit Todo"
                                 className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
                               />

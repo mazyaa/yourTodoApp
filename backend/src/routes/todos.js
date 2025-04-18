@@ -49,7 +49,7 @@ export default (app) =>{
         authMiddleware.isAuthorized,
         commonValidationMiddleware.validateIdParams,
         todosMiddleware.checkTodoIdAndUserIdExist,
-        todosValidation.updateTodoValidation,
+        // todosValidation.updateTodoValidation,
         todosController.updateTodoById
     )
 
