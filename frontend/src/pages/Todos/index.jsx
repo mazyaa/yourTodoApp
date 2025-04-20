@@ -340,7 +340,7 @@ export default function Todos() {
                       <div className="flex gap-4 ">
                         <button
                           className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
-                          onClick={() => openModal(todo)}
+                          onClick={() => openModal()}
                         >
                           Edit
                         </button>
@@ -418,7 +418,7 @@ export default function Todos() {
 
                               <input
                                 type="submit"
-                                onClick={(e) => editTodo(e, todo.id)}
+                                onClick={(e) => editTodo(e, todo.id)} // todo.id from the map function
                                 value="Edit Todo"
                                 className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
                               />
