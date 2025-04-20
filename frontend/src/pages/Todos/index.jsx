@@ -168,7 +168,6 @@ export default function Todos() {
           title: "Oops...",
           text: error.message,
         });
-        console.error(error.response.data.message || error.message);
       document.getElementById("my_modal_1").close();
       }
     }
@@ -324,7 +323,7 @@ export default function Todos() {
               </tr>
             </thead>
             <tbody>
-              {todosIsNotCompleted && todosIsNotCompleted.length > 0 ? (
+              {todosIsNotCompleted && todosIsNotCompleted?.length > 0 ? (
                 todosIsNotCompleted.map((todo) => (
                   <tr key={todo.id}>
                     <td className="border">{todo.title}</td>
