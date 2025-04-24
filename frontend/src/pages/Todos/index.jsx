@@ -129,7 +129,7 @@ export default function Todos() {
       });
   }
 
-  async function editTodo (e, id) {
+  async function editTodo(e, id) {
     e.preventDefault();
     const data = {
       title: editTitle,
@@ -168,7 +168,7 @@ export default function Todos() {
           title: "Oops...",
           text: error.message,
         });
-      document.getElementById("my_modal_1").close();
+        document.getElementById("my_modal_1").close();
       }
     }
   }
@@ -209,7 +209,106 @@ export default function Todos() {
         style={{ height: "auto" }}
         className="bg-gray-950 flex w-full flex-col items-center justify-center text-white"
       >
-        <div className="flex mt-34 h-auto backdrop-blur-md w-190 bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
+        {/* Mobile view */}
+        <div className="flex sm:hidden mt-34 backdrop-blur-md w-full bg-white/10 drop-shadow-lg p-12 rounded-xl flex-col gap-7">
+          <TrueFocus
+            sentence="Create Your Todos"
+            manualMode={false}
+            blurAmount={5}
+            borderColor="blue"
+            animationDuration={1}
+            pauseBetweenAnimations={0.5}
+          />
+          <form onSubmit={addTodo} className="flex flex-col gap-3 items-center">
+            <div className="flex flex-col">
+              <label htmlFor="Title" className="pl-4">
+                Title
+              </label>
+              <input
+                type="text"
+                className="border rounded-sm w-80 px-4 py-2"
+                placeholder="add title here"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              {errors.title && (
+                <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+                  ! {errors.title}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="Description" className="pl-4">
+                Description
+              </label>
+              <textarea
+                type="text"
+                className="border rounded-sm w-80 px-4 py-2 h-55"
+                placeholder="your description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              {errors.description && (
+                <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+                  ! {errors.description}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="Priority" className="pl-4">
+                Priority
+              </label>
+              <select
+                className="border rounded-sm w-80 px-4 py-2"
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              >
+                <optgroup className="bg-slate-950 text-sm">
+                  <option value="" disabled>
+                    Select Priority...
+                  </option>
+                  <option value="HIGH">HIGH</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="LOW">LOW</option>
+                </optgroup>
+              </select>
+              {errors.priority && (
+                <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+                  ! {errors.priority}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="dueDate" className="pl-4">
+                Due Date
+              </label>
+              <input
+                type="datetime-local"
+                className="border rounded-sm w-80 px-4 py-2"
+                placeholder="add date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+              {errors.dueDate && (
+                <p className="text-red-500 font-bold text-sm pl-4 pt-1">
+                  ! {errors.dueDate}
+                </p>
+              )}
+            </div>
+
+            <input
+              type="submit"
+              value="Add Todo"
+              className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
+            />
+          </form>
+        </div>
+
+        {/* Desktop view */}
+        <div className="hidden sm:flex mt-34 backdrop-blur-md w-full bg-white/10 drop-shadow-lg p-12 rounded-xl flex-col gap-7 justify-center items-center">
           <TrueFocus
             sentence="Create Your Todos"
             manualMode={false}
@@ -303,7 +402,8 @@ export default function Todos() {
             />
           </form>
         </div>
-        <div className="mb-43 backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl flex flex-col items-center justify-center mt-34 gap-10">
+
+        <div className="flex flex-col w-full mb-34 px-6 mt-34 space-y-4">
           <TrueFocus
             sentence="In Progress"
             manualMode={false}
@@ -312,144 +412,130 @@ export default function Todos() {
             animationDuration={1}
             pauseBetweenAnimations={0.5}
           />
-          <table className="table">
-            <thead>
-              <tr className="text-white text-center">
-                <th className="border">Title</th>
-                <th className="border">Description</th>
-                <th className="border">Priority</th>
-                <th className="border">Due Date</th>
-                <th className="border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {todosIsNotCompleted && todosIsNotCompleted?.length > 0 ? (
-                todosIsNotCompleted.map((todo) => (
-                  <tr key={todo.id}>
-                    <td className="border">{todo.title}</td>
-                    <td className="border">{todo.description}</td>
-                    <td className="border">{todo.priority}</td>
-                    <td className="border">
-                      {moment(todo.dueDate)
-                        .format("YYYY-MM-DD - HH:mm:ss")
-                        .toLocaleString()}
-                    </td>
 
-                    {/* Modal edit */}
-                    <td className="border">
-                      <div className="flex gap-4 ">
-                        <button
-                          className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
-                          onClick={() => openModal()}
-                        >
-                          Edit
-                        </button>
-                        <dialog id="my_modal_1" className="modal">
-                          <div className="modal-box flex h-auto backdrop-blur-md w- bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
-                            <h1 className="text-2xl">
-                              <ShinyText
-                                text="Edit Your Todo"
-                                disabled={false}
-                                speed={2}
-                                className=""
-                              />
-                            </h1>
-                            <form
-                              className="flex flex-col gap-3 text-white items-center"
-                            >
-                              <div className="flex flex-col">
-                                <label htmlFor="Title" className="pl-4">
-                                  Title
-                                </label>
-                                <input
-                                  type="text"
-                                  className="border rounded-sm w-100 px-4 py-2"
-                                  placeholder="add title here"
-                                  value={editTitle}
-                                  onChange={(e) => setEditTitle(e.target.value)}
-                                />
-                              </div>
+          {todosIsNotCompleted && todosIsNotCompleted.length > 0 ? (
+            todosIsNotCompleted.map((todo) => (
+              <div
+                key={todo.id}
+                className="bg-white/10 backdrop-blur-md p-5 rounded-xl text-white shadow-md"
+              >
+                <div className="mb-2">
+                  <p className="font-semibold text-lg">{todo.title}</p>
+                  <p className="text-sm text-gray-300">{todo.description}</p>
+                </div>
+                <div className="text-sm text-gray-300 mb-2">
+                  <p>
+                    <span className="font-semibold">Priority:</span>{" "}
+                    {todo.priority}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Due Date:</span>{" "}
+                    {moment(todo.dueDate).format("YYYY-MM-DD - HH:mm:ss")}
+                  </p>
+                </div>
+                <div className="flex gap-2 flex-wrap mt-3">
+                  <button
+                    className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
+                    onClick={() => openModal()}
+                  >
+                    Edit
+                  </button>
+                  <dialog id="my_modal_1" className="modal">
+                    <div className="modal-box flex h-auto backdrop-blur-md w- bg-white/10 drop-shadow-lg p-12 rounded-xl h-100 flex-col gap-7 justify-center items-center">
+                      <h1 className="text-2xl">
+                        <ShinyText
+                          text="Edit Your Todo"
+                          disabled={false}
+                          speed={2}
+                          className=""
+                        />
+                      </h1>
+                      <form className="flex flex-col gap-3 text-white items-center">
+                        <div className="flex flex-col">
+                          <label htmlFor="Title" className="pl-4">
+                            Title
+                          </label>
+                          <input
+                            type="text"
+                            className="border rounded-sm w-100 px-4 py-2"
+                            placeholder="add title here"
+                            value={editTitle}
+                            onChange={(e) => setEditTitle(e.target.value)}
+                          />
+                        </div>
 
-                              <div className="flex flex-col">
-                                <label htmlFor="Description" className="pl-4">
-                                  Description
-                                </label>
-                                <textarea
-                                  type="text"
-                                  className="border rounded-sm w-100 px-4 py-2 h-55"
-                                  placeholder="your description"
-                                  value={editDescription}
-                                  onChange={(e) =>
-                                    setEditDescription(e.target.value)
-                                  }
-                                />
-                              </div>
+                        <div className="flex flex-col">
+                          <label htmlFor="Description" className="pl-4">
+                            Description
+                          </label>
+                          <textarea
+                            type="text"
+                            className="border rounded-sm w-100 px-4 py-2 h-55"
+                            placeholder="your description"
+                            value={editDescription}
+                            onChange={(e) => setEditDescription(e.target.value)}
+                          />
+                        </div>
 
-                              <div className="flex flex-col">
-                                <label htmlFor="Priority" className="pl-4">
-                                  Priority
-                                </label>
-                                <select
-                                  className="border rounded-sm w-100 px-4 py-2"
-                                  value={editPriority}
-                                  onChange={(e) => setEditPriority(e.target.value)}
-                                >
-                                  <optgroup className="bg-slate-950">
-                                    <option value="">Select Priority...</option>
-                                    <option value="HIGH">HIGH</option>
-                                    <option value="MEDIUM">MEDIUM</option>
-                                    <option value="LOW">LOW</option>
-                                  </optgroup>
-                                </select>
-                              </div>
+                        <div className="flex flex-col">
+                          <label htmlFor="Priority" className="pl-4">
+                            Priority
+                          </label>
+                          <select
+                            className="border rounded-sm w-100 px-4 py-2"
+                            value={editPriority}
+                            onChange={(e) => setEditPriority(e.target.value)}
+                          >
+                            <optgroup className="bg-slate-950">
+                              <option value="">Select Priority...</option>
+                              <option value="HIGH">HIGH</option>
+                              <option value="MEDIUM">MEDIUM</option>
+                              <option value="LOW">LOW</option>
+                            </optgroup>
+                          </select>
+                        </div>
 
-                              <div className="flex flex-col">
-                                <label htmlFor="dueDate" className="pl-4">
-                                  Due Date
-                                </label>
-                                <input
-                                  type="datetime-local"
-                                  className="border rounded-sm w-100 px-4 py-2"
-                                  placeholder="add date"
-                                  value={editDueDate}
-                                  onChange={(e) => setEditDueDate(e.target.value)}
-                                />
-                              </div>
+                        <div className="flex flex-col">
+                          <label htmlFor="dueDate" className="pl-4">
+                            Due Date
+                          </label>
+                          <input
+                            type="datetime-local"
+                            className="border rounded-sm w-100 px-4 py-2"
+                            placeholder="add date"
+                            value={editDueDate}
+                            onChange={(e) => setEditDueDate(e.target.value)}
+                          />
+                        </div>
 
-                              <input
-                                type="submit"
-                                onClick={(e) => editTodo(e, todo.id)} // todo.id from the map function
-                                value="Edit Todo"
-                                className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
-                              />
-                              <div className="modal-action">
-                                <form method="dialog">
-                                  <button className="p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer">
-                                    Close
-                                  </button>
-                                </form>
-                              </div>
-                            </form>
-                          </div>
-                        </dialog>
-
-                        <button
-                          onClick={() => updateStatusTodo(todo.id)}
-                          className="btn btn-primary shadow-none"
-                        >
-                          Mark As Complete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr className="text-center">
-                  <td colSpan="5">No todos available</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                        <input
+                          type="submit"
+                          onClick={(e) => editTodo(e, todo.id)} // todo.id from the map function
+                          value="Edit Todo"
+                          className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
+                        />
+                        <div className="modal-action">
+                          <form method="dialog">
+                            <button className="p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer">
+                              Close
+                            </button>
+                          </form>
+                        </div>
+                      </form>
+                    </div>
+                  </dialog>
+                  <button
+                    className="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded text-white"
+                    onClick={() => updateStatusTodo(todo.id)}
+                  >
+                    Mark As Complete
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-white">No todos available</p>
+          )}
         </div>
       </div>
     </>
