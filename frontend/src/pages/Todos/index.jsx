@@ -22,6 +22,7 @@ export default function Todos() {
   const [errors, setErrors] = useState({});
   const [token, setToken] = useState("");
   const [expired, setExpired] = useState("");
+  const [selectedTodo, setSelectedTodo] = useState(null);
   const [todosIsNotCompleted, setTodosIsNotCompleted] = useState([]);
 
   useEffect(() => {
@@ -33,7 +34,8 @@ export default function Todos() {
     fetchData();
   }, []);
 
-  function openModal() {
+  function openModal(id) {
+    setSelectedTodo(id);
     document.getElementById("my_modal_1").showModal();
   }
 
@@ -116,6 +118,7 @@ export default function Todos() {
       }
     }
   }
+
 
   async function getTodosByStatusIsNotCompleted() {
     await axiosJWT
@@ -308,7 +311,7 @@ export default function Todos() {
         </div>
 
         {/* Desktop view */}
-        <div className="hidden sm:flex mt-34 backdrop-blur-md w-full bg-white/10 drop-shadow-lg p-12 rounded-xl flex-col gap-7 justify-center items-center">
+        <div className="hidden px-6 sm:flex mt-34 w-full flex-col gap-7">
           <TrueFocus
             sentence="Create Your Todos"
             manualMode={false}
@@ -317,7 +320,7 @@ export default function Todos() {
             animationDuration={1}
             pauseBetweenAnimations={0.5}
           />
-          <form onSubmit={addTodo} className="flex flex-col gap-3 items-center">
+          <form onSubmit={addTodo} className="flex flex-col backdrop-blur-md p-12 rounded-xl bg-white/10 drop-shadow-lg gap-3 items-center">
             <div className="flex flex-col">
               <label htmlFor="Title" className="pl-4">
                 Title
@@ -436,7 +439,7 @@ export default function Todos() {
                 <div className="flex gap-2 flex-wrap mt-3">
                   <button
                     className="btn shadow-none border-none text-white bg-green-800 hover:bg-green-900"
-                    onClick={() => openModal()}
+                    onClick={() => openModal(todo.id)} // Pass the todo.id to the openModal function
                   >
                     Edit
                   </button>
@@ -510,7 +513,7 @@ export default function Todos() {
 
                         <input
                           type="submit"
-                          onClick={(e) => editTodo(e, todo.id)} // todo.id from the map function
+                          onClick={(e) => editTodo(e, selectedTodo)} // todo.id from the map function
                           value="Edit Todo"
                           className="mt-2 p-3 px-10 rounded-full text-white hover:bg-sky-900 bg-sky-950 border-indigo-950 cursor-pointer"
                         />
