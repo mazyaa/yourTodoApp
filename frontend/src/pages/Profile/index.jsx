@@ -82,7 +82,7 @@ export default function Profile() {
     }
   );
 
- async function deleteTodo(id) {
+  async function deleteTodo(id) {
     try {
       const response = await axiosJWT.delete(
         import.meta.env.VITE_API_URL + `/todos/${id}`,
@@ -107,9 +107,10 @@ export default function Profile() {
     }
   }
   return (
-    <div 
-    style={{ height: "Auto" }}
-    className="bg-gray-950 flex w-full flex-col items-center justify-center h-screen text-white">
+    <div
+      style={{ height: "Auto" }}
+      className="bg-gray-950 flex w-full flex-col items-center justify-center h-screen text-white"
+    >
       <div className="mt-34 backdrop-blur-sm bg-white/10 w-100 px-12 py-5 rounded-xl flex flex-col gap-7">
         <Link
           to="/Todos"
@@ -147,7 +148,7 @@ export default function Profile() {
           </button>
         </div>
       </div>
-      <div className="mb-34 backdrop-blur-md bg-white/10 drop-shadow-lg p-12 rounded-xl flex flex-col items-center justify-center mt-34 gap-10">
+      <div className="flex flex-col w-full mb-34 px-6 mt-34 space-y-4">
         <TrueFocus
           sentence="Todos Completed"
           manualMode={false}
@@ -156,47 +157,43 @@ export default function Profile() {
           animationDuration={1}
           pauseBetweenAnimations={0.5}
         />
-        <table className="table">
-          <thead>
-            <tr className="text-white text-center">
-              <th className="border">Title</th>
-              <th className="border">Description</th>
-              <th className="border">Priority</th>
-              <th className="border">Due Date</th>
-              <th className="border">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {todosIsCompleted && todosIsCompleted.length > 0 ? (
-              todosIsCompleted.map((todo) => (
-                <tr key={todo.id}>
-                  <td className="border">{todo.title}</td>
-                  <td className="border">{todo.description}</td>
-                  <td className="border">{todo.priority}</td>
-                  <td className="border">
-                    {moment(todo.dueDate)
-                      .format("YYYY-MM-DD - HH:mm:ss")
-                      .toLocaleString()}
-                  </td>
-                  <td className="border">
-                    <div className="flex gap-4">
-                      <button
-                        onClick={() => deleteTodo(todo.id)}
-                        className="btn border-none bg-red-700 hover:bg-red-900 shadow-none text-white"
-                      >
-                        Delete Todo
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr className="text-center">
-                <td colSpan="5">No todos available</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+
+        {todosIsCompleted && todosIsCompleted.length > 0 ? (
+          todosIsCompleted.map((todo) => (
+            <div
+              key={todo.id}
+              className="bg-white/10 backdrop-blur-md p-5 rounded-xl text-white shadow-md"
+            >
+              <div className="mb-3">
+                <p className="font-semibold text-lg">{todo.title}</p>
+                <p className="text-sm text-gray-300">{todo.description}</p>
+              </div>
+              <div className="text-sm text-gray-300 mb-2">
+                <p>
+                  <span className="font-semibold">Priority:</span>{" "}
+                  {todo.priority}
+                </p>
+                <p>
+                  <span className="font-semibold">Due Date:</span>{" "}
+                  {moment(todo.dueDate).format("YYYY-MM-DD - HH:mm:ss")}
+                </p>
+              </div>
+              <div className="flex mt-7 justify-between items-center mt-4">
+                <p className="text-sm text-gray-300">
+                  Created At: {moment(todo.createdAt).format("YYYY-MM-DD")}
+                </p>
+                <button
+                  onClick={() => deleteTodo(todo.id)}
+                  className="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-white">No todos available</p>
+        )}
       </div>
     </div>
   );
