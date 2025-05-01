@@ -418,7 +418,7 @@ export default function Todos() {
             pauseBetweenAnimations={0.5}
           />
           <div className="flex justify-end pr-4">
-            <Link to="/todos/completed">
+            <Link to="/profile">
               <button className="bg-blue-700 cursor-pointer hover:bg-blue-800 px-4 py-2 rounded-full text-white">
                 See Todo Completed
               </button>
