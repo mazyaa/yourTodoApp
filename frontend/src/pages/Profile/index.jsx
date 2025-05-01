@@ -110,31 +110,22 @@ export default function Profile() {
       style={{ height: "Auto" }}
       className="bg-gray-950 flex w-full flex-col items-center justify-center h-screen text-white"
     >
-      <div className="mt-34 backdrop-blur-sm bg-white/10 w-100 px-12 py-5 rounded-xl flex flex-col gap-7">
-        <Link
-          to="/Todos"
-          className="p-2 border w-40 rounded-full text-white hover:bg-sky-950 border-slate-700 cursor-pointer"
-        >
-          <ShinyText
-            text="Back Create Todo"
-            disabled={false}
-            speed={2}
-            className=""
+      <div className="mt-34 backdrop-blur-sm bg-white/10 w-90 py-5 rounded-xl h-90 flex flex-col gap-7">
+        <div className="flex pt-12 flex-col">
+          <TrueFocus
+            sentence="Profile"
+            manualMode={false}
+            blurAmount={5}
+            borderColor="blue"
+            animationDuration={1}
+            pauseBetweenAnimations={0.5}
           />
-        </Link>
-        <TrueFocus
-          sentence="Profile"
-          manualMode={false}
-          blurAmount={5}
-          borderColor="blue"
-          animationDuration={1}
-          pauseBetweenAnimations={0.5}
-        />
-        <div className="flex justify-center">
-          <ul className="flex gap-5 flex-col text-lg font-semibold">
-            <li>Name : </li>
-            <li>Email : </li>
-          </ul>
+          <div className="flex justify-center">
+            <ul className="flex gap-5 flex-col text-lg font-semibold">
+              <li>Name : </li>
+              <li>Email : </li>
+            </ul>
+          </div>
         </div>
         <div className="flex justify-center">
           <button className="p-2 border w-40 rounded-full text-white hover:bg-sky-950 border-slate-700 cursor-pointer">
@@ -156,6 +147,14 @@ export default function Profile() {
           animationDuration={1}
           pauseBetweenAnimations={0.5}
         />
+
+        <div className="pl-4">
+          <Link to="/todos">
+            <button className="bg-blue-700 cursor-pointer hover:bg-blue-800 px-4 py-2 rounded-full text-white">
+              Back Create Todo
+            </button>
+          </Link>
+        </div>
 
         {todosIsCompleted && todosIsCompleted.length > 0 ? (
           todosIsCompleted.map((todo) => (
