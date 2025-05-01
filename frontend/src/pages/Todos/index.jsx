@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { refreshTokenAuth } from "../../services/authServices.js";
@@ -6,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import moment from "moment-timezone";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 import TrueFocus from "../../TextAnimations/TrueFocus/TrueFocus.jsx";
 import ShinyText from "../../TextAnimations/ShinyText/ShinyText.jsx";
 
@@ -118,7 +118,6 @@ export default function Todos() {
       }
     }
   }
-
 
   async function getTodosByStatusIsNotCompleted() {
     await axiosJWT
@@ -320,7 +319,10 @@ export default function Todos() {
             animationDuration={1}
             pauseBetweenAnimations={0.5}
           />
-          <form onSubmit={addTodo} className="flex flex-col backdrop-blur-md p-12 rounded-xl bg-white/10 drop-shadow-lg gap-3 items-center">
+          <form
+            onSubmit={addTodo}
+            className="flex flex-col backdrop-blur-md p-12 rounded-xl bg-white/10 drop-shadow-lg gap-3 items-center"
+          >
             <div className="flex flex-col">
               <label htmlFor="Title" className="pl-4">
                 Title
@@ -415,7 +417,13 @@ export default function Todos() {
             animationDuration={1}
             pauseBetweenAnimations={0.5}
           />
-
+          <div className="flex justify-end pr-4">
+            <Link to="/todos/completed">
+              <button className="bg-blue-700 cursor-pointer hover:bg-blue-800 px-4 py-2 rounded-full text-white">
+                See Todo Completed
+              </button>
+            </Link>
+          </div>
           {todosIsNotCompleted && todosIsNotCompleted.length > 0 ? (
             todosIsNotCompleted.map((todo) => (
               <div
@@ -528,7 +536,7 @@ export default function Todos() {
                     </div>
                   </dialog>
                   <button
-                    className="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded text-white"
+                    className="bg-blue-700 cursor-pointer hover:bg-blue-800 px-4 py-2 rounded text-white"
                     onClick={() => updateStatusTodo(todo.id)}
                   >
                     Mark As Complete
