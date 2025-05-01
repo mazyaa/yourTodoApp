@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -192,7 +191,11 @@ export default function Profile() {
             </div>
           ))
         ) : (
-          <p className="text-center text-white">No todos available</p>
+          <div className="w-full flex justify-center items-center mt-3">
+            <p className="text-center text-white bg-cyan-700 flex py-2 px-24 justify-center rounded-full">
+              No todos available
+            </p>
+          </div>
         )}
       </div>
     </div>
