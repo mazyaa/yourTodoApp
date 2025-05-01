@@ -545,7 +545,9 @@ export default function Todos() {
               </div>
             ))
           ) : (
-            <p className="text-center text-white">No todos available</p>
+            <div className="w-full flex justify-center items-center mt-3">
+              <p className="text-center text-white bg-cyan-700 flex py-2 px-24 justify-center rounded-full">No todos available</p>
+            </div>
           )}
         </div>
       </div>
